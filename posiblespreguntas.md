@@ -17,3 +17,5 @@ cristian v preguntas
 10) ver barrios con mas casas bajas un piso o dos pisos
 11) cuales son los barrios que mas casas venden (para distintos tipos de propiedades edificios, ph, casas)
 12) ver correlacion en un grafico o varios graficos entre los precios del m2 y la latitud y logitud
+
+13) ¿Existe una relacion entre la cercania al subte y el precio de una propiedad?
