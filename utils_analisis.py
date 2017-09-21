@@ -18,9 +18,12 @@ def _stringToInt(num):
     return res*(10**-len(y))
 
 def latLonToInt(latlon):
-    latlon = latlon.split(",")
+	try:
+    		latlon = latlon.split(",")
     
-    lat = latlon[0]
-    lon = latlon[1]
-    res = (_stringToInt(lat),_stringToInt(lon))
-    return res
+   		lat = latlon[0]
+    		lon = latlon[1]
+    		res = (_stringToInt(lat),_stringToInt(lon))
+    		return res
+	except:
+		return (-50.788796, -70.777773) #Si esta mal formateado lat-lon devuelvo un punto muy lejano 
