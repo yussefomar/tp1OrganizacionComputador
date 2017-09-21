@@ -95,24 +95,31 @@ barrios_capital = [u' Agronomía',
     u' Villa Urquiza',
  ]
 geolocator = Nominatim()
+from time import sleep
 
-def recuperar_barrio_capital(row):
-	"""PRE: row es un registro de capital federal con barrio incorrecto
-	POST: devuelve el place_name corregido o el original si no hacia falta corregir.
-	Si no se puede corregir porque no se tiene la lat-lon, devuelve 'Capital Federal'"""
+def recuperar_barrios_capital(posiciones):
+	"""PRE: Posiciones es una lista de strings "lat-lon" a las que se les quiere buscar
+	el barrio de capital a la cual hace referencia.
+	POST: devuelve un diccionario con cada posicion como key, y valor su barrio correspondiente
+	Si no se encuentra el barrio, quedara indicado como 'Capital Federal''"""
 	
-	if not(pd.isnull(row["lat-lon"])):
-		
-		info = geolocator.reverse(row["lat-lon"])
+	posiciones_corregidas = dict()
+	for pos in posiciones:
+		direccion = "Capital Federal"
+		info = geolocator.reverse(pos,timeout = 10)
 		a = info.address
 		if (a != None):
 			direccion = a.split(",")
 		else:
-			return row["place_name"]
-			
-		for b in barrios_capital:
-			if b in direccion:
-				
-				return b
-	return row["place_name"]
+			posiciones_corregidas[pos] = direccion
+			continue
+		
+		for barrio in barrios_capital:
+			if barrio in direccion:
+				direccion = barrio
+				sleep(1) # sleep for 1 sec (required by Nominatim usage policy)
+				break
+		posiciones_corregidas[pos] = direccion
+
+	return posiciones_corregidas
 
