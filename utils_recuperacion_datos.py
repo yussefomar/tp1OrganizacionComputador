@@ -102,24 +102,32 @@ def recuperar_barrios_capital(posiciones):
 	el barrio de capital a la cual hace referencia.
 	POST: devuelve un diccionario con cada posicion como key, y valor su barrio correspondiente
 	Si no se encuentra el barrio, quedara indicado como 'Capital Federal''"""
-	
+	number = 0
 	posiciones_corregidas = dict()
 	for pos in posiciones:
-		direccion = "Capital Federal"
-		info = geolocator.reverse(pos,timeout = 10)
-		a = info.address
-		if (a != None):
-			direccion = a.split(",")
-		else:
-			posiciones_corregidas[pos] = direccion
-			continue
+		try:
+    
+			print number
+			number+=1
+			print "now with: "+str(number)
+			direccion_definitiva = "Capital Federal"
+			info = geolocator.reverse(pos,timeout = 10)
+			a = info.address
+			if (a != None):
+				direccion = a.split(",")
+			else:
+				posiciones_corregidas[pos] = direccion
+				continue
 		
-		for barrio in barrios_capital:
-			if barrio in direccion:
-				direccion = barrio
-				sleep(1) # sleep for 1 sec (required by Nominatim usage policy)
-				break
-		posiciones_corregidas[pos] = direccion
-
+			for posible_barrio in direccion:
+				if posible_barrio in barrios_capital:
+					direccion_definitiva = posible_barrio
+					break
+	
+			sleep(1)
+			posiciones_corregidas[pos] = direccion_definitiva
+		except GeocoderTimedOut as e:
+			print "error"
+			continue
 	return posiciones_corregidas
 
